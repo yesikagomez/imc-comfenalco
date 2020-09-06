@@ -1,32 +1,53 @@
-import React from 'react';
-import { BrowserRouter, Switch, Route, Redirect, Link } from 'react-router-dom'
-import 'bulma/css/bulma.min.css';
-import 'font-awesome/css/font-awesome.min.css';
-import './index.css';
-import CalculadorApp from './components/imc/captura/CalculadorApp'
-import DetalleIMC from './components/imc/proyeccion/DetalleIMCApp'
-export default class App extends React.Component {
-  componentWillMount() {
-    this.setState({ imc: 0 })
-  }
+import React             from 'react';
+import { Route, Switch } from 'react-router-dom';
+import DetallePokemon           from './components/Detalle/DetallePokemon';
+import Filter            from './components/Navbar/Filter';
+import CardList        from './components/Card/Card-List';
 
-  render() {
-    return (
-      <div className="App">
-      <BrowserRouter>
-        <div className="tabs">
-          <ul>
-            <li className="is-active"><Link to = "/calculo-imc">Calculo</Link></li>
-            <li><Link to = "/detalle-imc">Detalle</Link></li>
-          </ul>
-        </div>
-        
-          <Switch>
-            <Route path = "/calculo-imc" exact component = {() =>  <CalculadorApp App={this} /> } />
-            <Route path = "/detalle-imc" exact component = {() =>  <DetalleIMC App={this} /> } />
-          </Switch>
-        </BrowserRouter>
-      </div>
-    );
-  }
+// Functional Stateless Component
+
+const App = ({ filterPokemons, filterBy, pokeList, evolutions, resetFilter, filteredPokeList }) => {
+
+	return (
+
+      <Switch>
+        <Route exact path='/' render={ () =>
+        	<React.Fragment>
+
+            <Filter
+              filterPokemons = { filterPokemons }
+              filterBy       = { filterBy }
+            />
+            <CardList
+              pokeList         = { pokeList }
+              filterBy         = { filterBy }
+              filteredPokeList = { filteredPokeList }
+            />
+
+        	</React.Fragment>
+        }
+        />
+        <Route path='/detalle/:id' render={ props =>
+          <DetallePokemon
+            match            = { props.match }
+            pokeList         = { pokeList }
+            evolutions       = { evolutions }
+            filterBy         = { filterBy }
+            filteredPokeList = { filteredPokeList }
+            resetFilter      = { resetFilter }
+          />}
+        />
+      </Switch>
+	);
 }
+
+export default App;
+
+
+
+
+
+
+  
+
+
